@@ -58,20 +58,20 @@ local itf_conf = {
         Determinate how to display rank bar
 
         0 - Display Regular rank only
-        1 - All rank display at once.
+        1 - All rank display at once
     ]]
     dy_rankdisplay = 0,
 
     --[[    dy_uselite - Display | Use Lite Mode
-        Reduce amount of text on screen.
+        Reduce amount of text on screen
 
-        0 - Don't use Lite Mode.
+        0 - Don't use Lite Mode
         1 - Use Lite Mode (No PIGI-Ratio, EX-Score)
     ]]
     dy_uselite = 0,
 
     --[[    dy_accdisplay - Display | Accuracy Display Mode
-        Determinate how accuracy should be displayed.
+        Determinate how accuracy should be displayed
 
         0 - Display as Percentage (Start from 0%)
         1 - Display as Percentage (Start from 100%)
@@ -197,7 +197,7 @@ end
 ---@param lineamount number (amount of the line)
 ---@param scoredata table (table value that contain score value)
 ---@param barsize number (size of the bar for draw)
----@param offset number (use in case if the bar origin is not top-left)
+---@param offset number (use in case if the bar origin is not at 'x: 0')
 ---@return table linedata (table value that contain x value)
 local function setLineData(lineamount, scoredata, barsize, offset)
     local linedata = {}
@@ -230,9 +230,7 @@ function MakunoV2UI:__construct(aupy, mife)
         {fonts.light, 31},      -- Score & Acc number
         {fonts.regular, 14},    -- Sub info number
         {fonts.regular, 20},    -- Combo number & Judgement text
-        --
-        {fonts.light, 48},      -- LIVE CLEAR/FAIL Text
-        {fonts.italic, 18},     -- Additional Live Text
+        {fonts.light, 50},      -- Live result text
     })
     self.image = AssetCache.loadMultipleImages(
         {
@@ -245,9 +243,7 @@ function MakunoV2UI:__construct(aupy, mife)
         self.fonts[2]:getHeight(),
         self.fonts[3]:getHeight(),
         self.fonts[4]:getHeight(),
-        --
         self.fonts[5]:getHeight(),
-        self.fonts[6]:getHeight(),
     }
 
     self.bool_pauseEnabled = true
@@ -450,6 +446,11 @@ function MakunoV2UI:__construct(aupy, mife)
     end
 
     self.sten_stencil5 = function()
+        love.graphics.polygon("fill", self.display_global.lb_x1, self.display_global.mb_line_y1, 281, self.display_global.mb_line_y1, 293, self.display_global.mb_line_y2, self.display_global.lb_x2, self.display_global.mb_line_y2)
+        love.graphics.polygon("fill", 679, self.display_global.mb_line_y1, self.display_global.rb_x2, self.display_global.mb_line_y1, self.display_global.rb_x1, self.display_global.mb_line_y2, 667, self.display_global.mb_line_y2)
+    end
+
+    self.sten_stencil6 = function()
         love.graphics.arc("fill", 480, 160, self.display_result.arc_size, 0, math.pi)
     end
 
@@ -481,19 +482,8 @@ end
 
 function MakunoV2UI:getFailAnimation()
     local TL = {
-
-        text1_ele = love.graphics.newText(self.fonts[5]),
-
-        text1 = spacedtext("LIVE FAILED"),
-
-        text1_color = {255, 255, 255},
-        text1_size = 1.1,
-        text1_opacity = 0,
-
         t = timer:new(),
     }
-
-    TL.text1_ele:addf(TL.text1, 960, "center", 0, 0, 0, 1, 1, 480, self.fonts_h[5])
 
     function TL.update(_, dt)
         TL.t:update(dt)
@@ -501,17 +491,7 @@ function MakunoV2UI:getFailAnimation()
 
     function TL:draw(_, x, y)
 
-        setColor(TL.text1_color, TL.text1_opacity)
-        love.graphics.draw(TL.text1_ele, 480, 340, 0, TL.text1_size, TL.text1_size)
-
     end
-
-    TL.t:tween(500, TL, {text1_opacity = 1, text1_size = 1}, "out-cubic")
-    TL.t:tween(3000, TL, {text1_color = {255, 69, 0}}, "in-out-sine")
-
-    TL.t:after(2750, function()
-        TL.t:tween(250, TL, {text1_opacity = 0}, "in-quart")
-    end)
 
     return TL
 end
@@ -722,25 +702,17 @@ function MakunoV2UI:startLiveClearAnimation(FC, callback, opaque)
             }, "in-quint"
         )
 
-        -- Stamina/Overflow Text
-        self.timer:after(0.8, function()
-            self.timer:tween(
-                0.5, self.display_global, {
-                    bonus_opa = 0, stami_opa = 0,
-                }, "out-quint"
-            )
-        end)
-
         -- All Text Interface + 2 Side Line
         self.timer:after(1, function()
             self.timer:tween(
                 1, self, {
-                    display_text_opacity = 0
+                    display_text_opacity = 0,
                 }, "out-quint"
             )
 
             self.timer:tween(
                 0.5, self.display_global, {
+                    bonus_opa = 0, stami_opa = 0,
                     L_line_x = 225, R_line_x = 735,
                 }, "out-quint"
             )
@@ -1175,7 +1147,7 @@ function MakunoV2UI:drawStatus()
     dst.t_judge = spacedtext(self.display_judgement_text)
     
     dsn.n_score = string.format("%.0f", self.display_score):reverse():gsub("(%d%d%d)","%1,"):gsub(",(%-?)$", "%1"):reverse()
-    dsn.n_acc = string.format("%.2f", self.display_accuracy).."%"
+    dsn.n_acc = string.format("%.2f%%", self.display_accuracy)
     dsn.n_accscore = string.format("%.0f", self.display_accuracy*10000):reverse():gsub("(%d%d%d)","%1,"):gsub(",(%-?)$", "%1"):reverse()
     dsn.n_exsc = string.format("%.0f", self.display_EXscore)
     dsn.n_combo = tostring(self.data_currentcombo)
@@ -1194,7 +1166,7 @@ function MakunoV2UI:drawStatus()
     elseif self.data_PIGI_ratio == (1/0) or self.data_PIGI_ratio == (-1/0) then -- Infinity
         dsn.n_pigi = "∞:1"
     else
-        dsn.n_pigi = string.format("%.2f", self.display_PIGIRatio)..":1"
+        dsn.n_pigi = string.format("%.2f:1", self.display_PIGIRatio)
     end
 
     ----------------------------------------
@@ -1337,6 +1309,9 @@ function MakunoV2UI:drawStatus()
         ds_sn.n_stam = string.format("%.0f", self.display_stamina + self.display_overflowstamina)
         ds_sn.n_ovbon = tostring("x"..self.data_overflowbonus)
 
+        love.graphics.stencil(self.sten_stencil5, "increment", 1)
+        love.graphics.setStencilTest("gequal", 1)
+
         setColor(25, 25, 25, self.display_element_opacity * self.display_global.stami_opa * 0.3)
         love.graphics.printf(ds_sn.n_stam, self.fonts[1], 688, self.display_global.mb_line_y1 + 7, 75, "center", 0, 1, 1, 37.5, self.fonts_h[1] / 2)
         setColor(HSLtoRGB(ds_se.c_text, 0.85, 0.42), self.display_text_opacity * self.display_global.stami_opa * 0.9)
@@ -1348,6 +1323,8 @@ function MakunoV2UI:drawStatus()
             setColor(HSLtoRGB(ds_se.c_text, 0.85, 0.42), self.display_text_opacity * self.display_global.bonus_opa * 0.9)
             love.graphics.printf(ds_sn.n_ovbon, self.fonts[1], 274, self.display_global.mb_line_y1 + 6, 75, "center", 0, 1, 1, 37.5, self.fonts_h[1] / 2)
         end
+
+        love.graphics.setStencilTest()
     end
 
     ----------------------------------------
@@ -1428,17 +1405,16 @@ function MakunoV2UI:drawStatus()
         setColor(255, 255, 255, 1)
 		love.graphics.rectangle("fill", -88, self.display_result.fakeresultbox_y, 1136, 452)
 
-        love.graphics.stencil(self.sten_stencil5, "increment", 1)
+        love.graphics.stencil(self.sten_stencil6, "increment", 1)
         love.graphics.setStencilTest("gequal", 1)
 
         if self.display_result.result_text then
             love.graphics.printf(self.display_result.result_text, self.fonts[5], 480, 320, 480, "center", 0, 1, 1, 240, self.fonts_h[5] / 2)
         end
-
+        
         love.graphics.setStencilTest()
 
         setColor(255, 255, 255, self.display_result.arc_opacity)
-
         love.graphics.circle("line", 480, 160, self.display_result.arc_size)
 
     end
