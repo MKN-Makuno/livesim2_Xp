@@ -315,8 +315,6 @@ function MakunoV2UI:__construct(aupy, mife)
         bgcover_dim = 0, bgcover_color = {0, 0, 0},
 
         result_text = nil,
-        arc_size = 0,
-        arc_opacity = 0.8,
 
         fakeresultbox_y = 1000,
     }
@@ -449,11 +447,6 @@ function MakunoV2UI:__construct(aupy, mife)
         love.graphics.polygon("fill", self.display_global.lb_x1, self.display_global.mb_line_y1, 281, self.display_global.mb_line_y1, 293, self.display_global.mb_line_y2, self.display_global.lb_x2, self.display_global.mb_line_y2)
         love.graphics.polygon("fill", 679, self.display_global.mb_line_y1, self.display_global.rb_x2, self.display_global.mb_line_y1, self.display_global.rb_x1, self.display_global.mb_line_y2, 667, self.display_global.mb_line_y2)
     end
-
-    self.sten_stencil6 = function()
-        love.graphics.arc("fill", 480, 160, self.display_result.arc_size, 0, math.pi)
-    end
-
 end
 
 ------------------------------------
@@ -669,23 +662,10 @@ function MakunoV2UI:startLiveClearAnimation(FC, callback, opaque)
             
         end
 
-        if FC and self.data_playresult.PL then
-            self.display_result.result_text = spacedtext("PERFECT LIVE")
-        elseif FC and self.data_playresult.FC then
-            self.display_result.result_text = spacedtext("FULL COMBO")
-        end
-
         self.timer:tween(
             1, self.display_result, {
                 bgcover_dim = 0.33,
-                arc_size = 750,
             }, "out-expo"
-        )
-
-        self.timer:tween(
-            0.5, self.display_result, {
-                arc_opacity = 0,
-            }, "in-quart"
         )
 
         -- Most of Text Information & Bar
@@ -725,20 +705,6 @@ function MakunoV2UI:startLiveClearAnimation(FC, callback, opaque)
                     mb_line_y1 = 56 - 900, mb_line_y2 = 68 - 900,
                 }, "in-quart"
             )
-
-            self.timer:tween(
-                0.25, self.display_result, {
-                    arc_opacity = 0.8,
-                }, "out-quart"
-            )
-        end)
-
-        self.timer:after(3, function()
-            self.timer:tween(
-                1, self.display_result, {
-                    arc_size = 0,
-                }, "out-expo"
-            )
         end)
 
         self.timer:after(3.5, function()
@@ -747,7 +713,6 @@ function MakunoV2UI:startLiveClearAnimation(FC, callback, opaque)
                     bgcover_dim = 0.67,
                     bgcover_color = {100, 98, 98},
                     fakeresultbox_y = 231,
-                    arc_opacity = 0,
                 }, "out-quart"
             )
         end)
@@ -1152,7 +1117,7 @@ function MakunoV2UI:drawStatus()
     dsn.n_exsc = string.format("%.0f", self.display_EXscore)
     dsn.n_combo = tostring(self.data_currentcombo)
     dsn.n_comboburst = tostring(self._next_comboburst - 100)
-
+    
     if itf_conf.dy_rankdisplay == 1 then
         dse.b_score = Util.clamp(self.display_score/self.data_scorerank[8], 0, 1) * 506
         dse.l_score = setLineData(8, self.data_scorerank, 506, 228)
@@ -1402,20 +1367,10 @@ function MakunoV2UI:drawStatus()
         setColor(self.display_result.bgcover_color, self.display_result.bgcover_dim)
         love.graphics.rectangle("fill", -88, -43, 1136, 726)
 
+
+
         setColor(255, 255, 255, 1)
 		love.graphics.rectangle("fill", -88, self.display_result.fakeresultbox_y, 1136, 452)
-
-        love.graphics.stencil(self.sten_stencil6, "increment", 1)
-        love.graphics.setStencilTest("gequal", 1)
-
-        if self.display_result.result_text then
-            love.graphics.printf(self.display_result.result_text, self.fonts[5], 480, 320, 480, "center", 0, 1, 1, 240, self.fonts_h[5] / 2)
-        end
-        
-        love.graphics.setStencilTest()
-
-        setColor(255, 255, 255, self.display_result.arc_opacity)
-        love.graphics.circle("line", 480, 160, self.display_result.arc_size)
 
     end
 
