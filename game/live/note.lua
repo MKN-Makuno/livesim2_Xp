@@ -588,7 +588,7 @@ function normalMovingNote:__construct(definition, param)
 	self.simul = false -- set later
 	-- swing rotation
 	self.rotation = false -- set later
-	-- vanish type (1 = hidden, 2 = sudden)
+	-- vanish type (1 = hidden, 2 = sudden, 3 = stealth)
 	self.vanishType = definition.vanish or param.vanish or 0
 	-- opacity
 	self.opacity = 1
@@ -620,6 +620,9 @@ function normalMovingNote:update(dt)
 		elseif self.vanishType == 2 then
 			-- Sudden note
 			self.opacity = Util.clamp((self.elapsedTime - self.noteSpeed * 0.4) / self.noteSpeed * 5, 0, 1)
+		elseif self.vanishType == 3 then
+			-- Stealth note
+			self.opacity = 0
 		end
 	end
 
@@ -778,6 +781,10 @@ function longMovingNote:update(dt)
 			-- Sudden note
 			self.opacity = Util.clamp((self.elapsedTime - self.noteSpeed * 0.4) * 5, 0, 1)
 			self.lnOpacity = Util.clamp((x - self.noteSpeed * 0.4) * 5, 0, 1)
+		elseif self.vanishType == 3 then
+			-- Stealth note
+			self.opacity = 0
+			self.lnOpacity = 0
 		end
 	end
 

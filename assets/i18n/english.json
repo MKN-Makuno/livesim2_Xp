@@ -104,6 +104,7 @@
 		"setting:live:vanish:none": "None",
 		"setting:live:vanish:hidden": "Hidden",
 		"setting:live:vanish:sudden": "Sudden",
+		"setting:live:vanish:stealth": "Stealth",
 		"setting:volume": "Volume",
 		"setting:volume:effect": "SE Volume",
 		"setting:volume:master": "Master Volume",
