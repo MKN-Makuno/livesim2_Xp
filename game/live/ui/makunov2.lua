@@ -461,7 +461,7 @@ end
 function MakunoV2UI:getLanePosition()
     -- Their origin is top-left
     return {--  X ,  Y
-        vector(880, 160), -- 1
+        vector(880, 160), -- 9
         vector(849, 313),
         vector(762, 442),
         vector(633, 529),
@@ -469,7 +469,7 @@ function MakunoV2UI:getLanePosition()
         vector(326, 529),
         vector(197, 442),
         vector(110, 313),
-        vector(80,  160), -- 9
+        vector(80,  160), -- 1
     }
 end
 
