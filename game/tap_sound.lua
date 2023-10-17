@@ -45,7 +45,7 @@ return {
 	},
 	-- New SIF tap sound
 	{
-		name = "SIF:2",
+		name = "SIF:Clap",
 		volumeMultipler = 0.8,
 		perfect = "sound/tap/sif/live_se_02_4.mp3",
 		great = "sound/tap/sif/live_se_02_3.mp3",
@@ -54,7 +54,7 @@ return {
 		starExplode = "sound/tap/sif/SE_326.ogg"
 	},
 	{
-		name = "SIF:3",
+		name = "SIF:Bubble",
 		volumeMultipler = 0.8,
 		perfect = "sound/tap/sif/live_se_03_4.mp3",
 		great = "sound/tap/sif/live_se_03_3.mp3",
@@ -63,7 +63,7 @@ return {
 		starExplode = "sound/tap/sif/SE_326.ogg"
 	},
 	{
-		name = "SIF:4",
+		name = "SIF:SF",
 		volumeMultipler = 0.8,
 		perfect = "sound/tap/sif/live_se_04_4.mp3",
 		great = "sound/tap/sif/live_se_04_3.mp3",
