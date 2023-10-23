@@ -287,6 +287,8 @@ function DEPLS:load(arg)
 		self.data.liveUI:setLiveClearVoice(AudioManager.newAudioDirect(arg.summary.liveClear, "voice"))
 	end
 
+	-- note & icon size
+	self.persist.noteVisualSize = Setting.get("VISUAL_NOTEICONSIZE") * 0.01
 	-- Lane definition
 	self.persist.lane = self.data.liveUI:getLanePosition()
 
@@ -315,6 +317,7 @@ function DEPLS:load(arg)
 		image = self.assets.images.note,
 		trailImage = self.assets.images.longNoteTrail,
 		noteSpawningPosition = self.data.liveUI:getNoteSpawnPosition(),
+		noteVisualSize = self.persist.noteVisualSize,
 		lane = self.persist.lane,
 		-- DEBUG v4.0.0-beta3
 		accuracy = {
@@ -1110,7 +1113,7 @@ local function draw(self)
 		-- draw unit icons
 		love.graphics.setColor(color.white)
 		for i, v in ipairs(self.persist.lane) do
-			love.graphics.draw(self.data.unitIcons[i], v.x, v.y, 0, 1, 1, 64, 64)
+			love.graphics.draw(self.data.unitIcons[i], v.x, v.y, 0, self.persist.noteVisualSize, self.persist.noteVisualSize, 64, 64)
 		end
 		-- draw unit skill indicator
 		self.data.skill:drawUpper()
@@ -1134,7 +1137,7 @@ local function draw(self)
 		love.graphics.setColor(color.red)
 		if self.persist.replayKeyOverlay[i] then
 			local x = self.persist.lane[i]
-			love.graphics.draw(self.assets.images.dummyUnit, x.x, x.y, 0, 1, 1, 64, 64)
+			love.graphics.draw(self.assets.images.dummyUnit, x.x, x.y, 0, self.persist.noteVisualSize, self.persist.noteVisualSize, 64, 64)
 		end
 	end
 	-- draw replay touch overlay

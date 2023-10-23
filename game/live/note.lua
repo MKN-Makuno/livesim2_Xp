@@ -158,6 +158,8 @@ function noteManager:__construct(param)
 	self.noteImage = param.image
 	-- long note trail image
 	self.lnTrailImage = param.trailImage
+	-- note size
+	self.noteSize = param.noteVisualSize 
 	-- note speed
 	self.noteSpeed = param.noteSpeed or Setting.get("NOTE_SPEED") * 0.001
 	-- list of notes
@@ -637,7 +639,7 @@ function normalMovingNote:draw()
 		self.noteLayers,
 		self.opacity,
 		self.position,
-		self.elapsedTime / self.noteSpeed,
+		(self.elapsedTime / self.noteSpeed) * self.manager.noteSize,
 		self.rotation
 	)
 end
@@ -789,8 +791,8 @@ function longMovingNote:update(dt)
 	end
 
 	-- calculate vertices
-	local s1 = self.lnHolding and 1 or self.elapsedTime / self.noteSpeed
-	local s2 = math.max(self.elapsedTime - self.lnSpawnTime, 0) / self.noteSpeed
+	local s1 = self.lnHolding and self.manager.noteSize or (self.elapsedTime / self.noteSpeed) * self.manager.noteSize
+	local s2 = (math.max(self.elapsedTime - self.lnSpawnTime, 0) / self.noteSpeed) * self.manager.noteSize
 	local op = select(4, color.compat(0, 0, 0, self.opacity))
 	-- First position
 	self.lnVertices[4][1] = self.position.x + (s1 * 62) * math.cos(self.lnRotation)
@@ -832,7 +834,7 @@ function longMovingNote:drawBelow()
 	love.graphics.draw(self.lnMesh)
 	-- 2. draw end note circle
 	if self.elapsedTime - self.lnSpawnTime > 0 then
-		local s = (self.elapsedTime - self.lnSpawnTime) / self.noteSpeed
+		local s = ((self.elapsedTime - self.lnSpawnTime) / self.noteSpeed) * self.manager.noteSize
 		love.graphics.setColor(color.compat(255, 255, 255, self.manager.opacity * self.lnOpacity))
 		love.graphics.draw(
 			self.manager.noteImage, note.quadRegion[3],
@@ -848,7 +850,7 @@ function longMovingNote:draw()
 		self.noteLayers,
 		self.opacity,
 		self.position,
-		self.lnHolding and 1 or self.elapsedTime / self.noteSpeed,
+		self.lnHolding and self.manager.noteSize or (self.elapsedTime / self.noteSpeed) * self.manager.noteSize,
 		self.rotation
 	)
 end
@@ -859,6 +861,7 @@ function longMovingNote:drawAbove()
 		love.graphics.push()
 		love.graphics.translate(self.position:unpack())
 		love.graphics.rotate(self.lnFlashRotation)
+		love.graphics.scale(self.manager.noteSize, self.manager.noteSize)
 		self.lnFlashEffect:setOpacity(self.manager.opacity * 255)
 		self.lnFlashEffect:draw()
 		love.graphics.pop()
@@ -1204,10 +1207,10 @@ end
 function noteManager:draw()
 	-- draw timing window
 	if math.max(self.yellowTimingWindow.duration, self.redTimingWindow.duration) > 0 then
-		local xpy = math.sin(math.pi * self.yellowTimingWindow.rotation / 6) * 64
-		local ypy = math.cos(math.pi * self.yellowTimingWindow.rotation / 6) * 64
-		local xpr = math.sin(math.pi * self.redTimingWindow.rotation / 6) * 64
-		local ypr = math.cos(math.pi * self.redTimingWindow.rotation / 6) * 64
+		local xpy = math.sin(math.pi * self.yellowTimingWindow.rotation / 6) * (64 * self.noteSize)
+		local ypy = math.cos(math.pi * self.yellowTimingWindow.rotation / 6) * (64 * self.noteSize)
+		local xpr = math.sin(math.pi * self.redTimingWindow.rotation / 6) * (64 * self.noteSize)
+		local ypr = math.cos(math.pi * self.redTimingWindow.rotation / 6) * (64 * self.noteSize)
 
 		love.graphics.setColor(color.compat(255, 255, 255, self.opacity))
 
@@ -1215,11 +1218,11 @@ function noteManager:draw()
 			local pos = self.lane[i]
 
 			if self.yellowTimingWindow.duration > 0 then
-				love.graphics.draw(self.timingImage, yellowTimingQuad, pos.x + xpy, pos.y + ypy, 0, 1, 1, 16, 16)
+				love.graphics.draw(self.timingImage, yellowTimingQuad, pos.x + xpy, pos.y + ypy, 0, self.noteSize, self.noteSize, 16, 16)
 			end
 
 			if self.redTimingWindow.duration > 0 then
-				love.graphics.draw(self.timingImage, redTimingQuad, pos.x + xpr, pos.y + ypr, 0, 1, 1, 16, 16)
+				love.graphics.draw(self.timingImage, redTimingQuad, pos.x + xpr, pos.y + ypr, 0, self.noteSize, self.noteSize, 16, 16)
 			end
 		end
 	end
