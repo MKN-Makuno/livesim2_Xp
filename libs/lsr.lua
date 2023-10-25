@@ -173,7 +173,7 @@ function lsr.loadReplay(path, beatmapHash)
 		vanish = string2dwordu(lsr.file.read(file, 4))
 	}
 
-	if hand.vanish > 2 then
+	if hand.vanish > 3 then
 		lsr.file.close(file)
 		return nil, "invalid vanish value"
 	end
