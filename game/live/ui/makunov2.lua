@@ -867,7 +867,7 @@ function MakunoV2UI:comboJudgement(judgement, addcombo)
         end
 
         self.data_PIGI_ratio = self.count_perfect / (self.count_great + self.count_good + self.count_bad + self.count_miss)
-        local PIGInotNaNINF = (self.data_PIGI_ratio ~= self.data_PIGI_ratio) or self.data_PIGI_ratio == (1/0) or self.data_PIGI_ratio == (-1/0)
+        local PIGInotNaNINF = not(self.data_PIGI_ratio ~= self.data_PIGI_ratio or self.data_PIGI_ratio == (1/0) or self.data_PIGI_ratio == (-1/0))
 
         if PIGInotNaNINF then
 
