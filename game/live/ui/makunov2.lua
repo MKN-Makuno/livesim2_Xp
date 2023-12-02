@@ -644,6 +644,8 @@ end
 
 function MakunoV2UI:startLiveClearAnimation(FC, callback, opaque)
 
+    self.bool_pauseEnabled = false
+
     if self.time_postlive == -math.huge and self.time_prelive > 0 and self.data_totalnote == 0 then
         self.time_postlive = 0.05
         self.data_livecallback = callback
