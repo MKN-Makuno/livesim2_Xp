@@ -111,6 +111,10 @@ function osuLoader:__construct(f, dir)
 	internal.difficulty = diffInfo
 	line = readKVSection(lines, diffInfo, "(%w+):(.+)")
 
+	if diffInfo.CircleSize > 9 then
+		error("Beatmaps with 10K+ is not supported.")
+	end
+
 	-- [Events] section
 	assert(line == "[Events]", "missing [Events] section")
 	internal.storyboardLine = {}
