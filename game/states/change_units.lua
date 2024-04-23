@@ -321,7 +321,7 @@ local function isImageFitInUnitIconCriteria(path)
 	local height = d + c * 256 + b * 65536 + a * 16777216
 
 	-- not 128x128? it should be false
-	print(path, width, height)
+	-- print(path, width, height)
 	return width == 128 and height == 128
 end
 
