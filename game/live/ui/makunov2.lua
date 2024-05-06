@@ -184,8 +184,6 @@ end
 ---@param i integer (nil - 9)
 ---@return table RGB {r, g, b}
 local function retrieveColor(i)
-    -- somehow 'return itf_score.color[i]' carries color data to next play
-    -- so I have to change to be sperate.
     if i then
         return {itf_score.color[i][1], itf_score.color[i][2], itf_score.color[i][3]}
     else
@@ -249,6 +247,7 @@ function MakunoV2UI:__construct(aupy, mife)
     self.bool_pauseEnabled = true
     self.effect_taplist = {}
 
+    self.data_vanishtype = Setting.get("VANISH_TYPE")
     self.bool_staminafunc = Setting.get("STAMINA_FUNCTIONAL") == 1
     self.bool_mineffec = mife
     self.bool_autoplay = aupy
@@ -309,6 +308,9 @@ function MakunoV2UI:__construct(aupy, mife)
         L_line_x = 5, R_line_x = 955,
         M_bar_y = 50, T_bar_y = 44, B_bar_y = 56,
 
+        ---- Judgement & Combo
+        Combo_y = (self.data_vanishtype == 2 and 150) or 400, 
+        Judgement_y = (self.data_vanishtype == 2 and 186) or 436,
     }
 
     self.display_result = {
@@ -656,23 +658,13 @@ function MakunoV2UI:startLiveClearAnimation(FC, callback, opaque)
     end
 
     if self.time_postlive == -math.huge then
-        self.time_postlive = 4
+        self.time_postlive = 2
         self.data_livecallback = callback
         self.data_liveopaque = opaque
 
-        if not(self.bool_autoplay) then
-            
-        end
-
-        self.timer:tween(
-            1, self.display_result, {
-                bgcover_dim = 0.33,
-            }, "out-expo"
-        )
-
         -- Most of Text Information & Bar
         self.timer:tween(
-            1, self.display_global, {
+            0.6, self.display_global, {
                 L_toptext_y = 80, R_toptext_y = 80,
                 L_topnum_y = 133, R_topnum_y = 133,
 
@@ -685,33 +677,33 @@ function MakunoV2UI:startLiveClearAnimation(FC, callback, opaque)
         )
 
         -- All Text Interface + 2 Side Line
-        self.timer:after(1, function()
+        self.timer:after(0.6, function()
             self.timer:tween(
-                1, self, {
+                0.8, self, {
                     display_text_opacity = 0,
                 }, "out-quint"
             )
 
             self.timer:tween(
-                0.5, self.display_global, {
+                0.8, self.display_global, {
                     bonus_opa = 0, stami_opa = 0,
                     L_line_x = 225, R_line_x = 735,
                 }, "out-quint"
             )
         end)
 
-        self.timer:after(1.5, function()
+        self.timer:after(1.3, function()
             self.timer:tween(
-                0.95, self.display_global, {
+                0.8, self.display_global, {
                     M_bar_y = 50 - 900, T_bar_y = 44 - 900, B_bar_y = 56 - 900,
                     mb_line_y1 = 56 - 900, mb_line_y2 = 68 - 900,
                 }, "in-quart"
             )
         end)
 
-        self.timer:after(3.5, function()
+        self.timer:after(1.6, function()
             self.timer:tween(
-                0.5, self.display_result, {
+                0.6, self.display_result, {
                     bgcover_dim = 0.67,
                     bgcover_color = {100, 98, 98},
                     fakeresultbox_y = 231,
@@ -1159,23 +1151,23 @@ function MakunoV2UI:drawStatus()
     --- Combo & Judgement
     if self.data_currentcombo > 0 then
         setColor(55, 55, 55, self.display_text_opacity * self.display_combo_opacity * 0.2)
-        love.graphics.printf(dsn.n_combo, self.fonts[4], 480, 402, 240, "center", 0, self.display_text_scale, self.display_text_scale, 120, self.fonts_h[4] * 0.5)
+        love.graphics.printf(dsn.n_combo, self.fonts[4], 480, self.display_global.Combo_y + 2, 240, "center", 0, self.display_text_scale, self.display_text_scale, 120, self.fonts_h[4] * 0.5)
         setColor(255, 255, 255, self.display_text_opacity * self.display_combo_opacity * 0.85)
-        love.graphics.printf(dsn.n_combo, self.fonts[4], 480, 400, 240, "center", 0, self.display_text_scale, self.display_text_scale, 120, self.fonts_h[4] * 0.5)
+        love.graphics.printf(dsn.n_combo, self.fonts[4], 480, self.display_global.Combo_y, 240, "center", 0, self.display_text_scale, self.display_text_scale, 120, self.fonts_h[4] * 0.5)
     end
 
     if not(self.bool_mineffec) and self.display_comboburst_opacity > 0 then
         setColor(55, 55, 55, self.display_text_opacity * self.display_comboburst_opacity * 0.2)
-        love.graphics.printf(dsn.n_comboburst, self.fonts[4], 480, 402, 240, "center", 0, self.display_comboburst_scale * self.display_text_scale, self.display_comboburst_scale * self.display_text_scale, 120, self.fonts_h[4] * 0.5)
+        love.graphics.printf(dsn.n_comboburst, self.fonts[4], 480, self.display_global.Combo_y + 2, 240, "center", 0, self.display_comboburst_scale * self.display_text_scale, self.display_comboburst_scale * self.display_text_scale, 120, self.fonts_h[4] * 0.5)
         setColor(255, 255, 255, self.display_text_opacity * self.display_comboburst_opacity * 0.85)
-        love.graphics.printf(dsn.n_comboburst, self.fonts[4], 480, 400, 240, "center", 0, self.display_comboburst_scale * self.display_text_scale, self.display_comboburst_scale * self.display_text_scale, 120, self.fonts_h[4] * 0.5)
+        love.graphics.printf(dsn.n_comboburst, self.fonts[4], 480, self.display_global.Combo_y, 240, "center", 0, self.display_comboburst_scale * self.display_text_scale, self.display_comboburst_scale * self.display_text_scale, 120, self.fonts_h[4] * 0.5)
     end
 
     if self.display_judgement_text and dst.t_judge and self.display_judgement_opacity > 0 then
         setColor(55, 55, 55, self.display_text_opacity * self.display_judgement_opacity * 0.2)
-        love.graphics.printf(dst.t_judge, self.fonts[4], 480, 438, 240, "center", 0, self.display_judgement_scale * self.display_text_scale, self.display_judgement_scale * self.display_text_scale, 120, self.fonts_h[4] * 0.5)
+        love.graphics.printf(dst.t_judge, self.fonts[4], 480, self.display_global.Judgement_y + 2, 240, "center", 0, self.display_judgement_scale * self.display_text_scale, self.display_judgement_scale * self.display_text_scale, 120, self.fonts_h[4] * 0.5)
         setColor(255, 255, 255, self.display_text_opacity * self.display_judgement_opacity * 0.85)
-        love.graphics.printf(dst.t_judge, self.fonts[4], 480, 436, 240, "center", 0, self.display_judgement_scale * self.display_text_scale, self.display_judgement_scale * self.display_text_scale, 120, self.fonts_h[4] * 0.5)
+        love.graphics.printf(dst.t_judge, self.fonts[4], 480, self.display_global.Judgement_y, 240, "center", 0, self.display_judgement_scale * self.display_text_scale, self.display_judgement_scale * self.display_text_scale, 120, self.fonts_h[4] * 0.5)
     end
 
     ----------------------------------------
@@ -1368,8 +1360,6 @@ function MakunoV2UI:drawStatus()
         
         setColor(self.display_result.bgcover_color, self.display_result.bgcover_dim)
         love.graphics.rectangle("fill", -88, -43, 1136, 726)
-
-
 
         setColor(255, 255, 255, 1)
 		love.graphics.rectangle("fill", -88, self.display_result.fakeresultbox_y, 1136, 452)
