@@ -64,7 +64,7 @@ local l = {
 		0 - Combo does affect the Score Multiplier.
 		1 - Combo doesn't affect the Score Multiplier.
 	]]
-	ds_casm = 1,
+	ds_casm = 0,
 
 	--[[	adm - AccuracyDisplayMode
 		1 - Start with 100%, decrease depend on judgements.
@@ -304,9 +304,7 @@ function MakunoUI:__construct(autoplay, mineff)
 	self.MC = true
 	--
 	self.audio_liveclearvoice = nil
-	self.audio_livefailvoice = nil
 	self.check_liveclearvoiceplayed = false
-	self.check_livefailvoiceplayed = false
 	--
 
 	---- Other #8
@@ -1002,37 +1000,60 @@ end
 
 --------------------
 -- Primary Draw Function
-
+local dh = {
+	score_t = nil,
+	judge_t = nil,
+	acc_t = nil,
+	scacc_t = nil,
+	pigi_t = nil,
+	exsc_t = nil,
+	--
+	score_amo = nil,
+	scacc_amo = nil,
+	acc_amo = nil,
+	exscc_amo = nil,
+	ov_amo = nil,
+	sta_amo = nil,
+	--
+	pigi_ratio = nil,
+	--
+	pause_t = nil,
+	--
+	sta_pos = nil,
+	auto_pos = nil,
+	--
+	sbs = nil,
+	abs = nil,
+	ofs = nil,
+	--
+	t_y2 = nil,
+}
 function MakunoUI:drawHeader()
 
-	local dh = {
-		score_t = tostring(self.text.Top.SCORE.." (Rank "..self.dis_currentrank..")"),
-		judge_t = tostring(self.text.Top.JUDGE),
-		acc_t = tostring(self.text.Top.ACC),
-		scacc_t = tostring(self.text.Top.ACC.." "..self.text.Top.SCORE),
-		pigi_t = tostring(self.text.Top.PIGI),
-		exsc_t = tostring(self.text.Top.EXSCORE),
-		--
-		score_amo = string.format("%06d", self.dis_score),
-		scacc_amo = string.format("%06d", self.dis_score_2),
-		acc_amo = string.format("%.2f", self.dis_acc == 0 and 0 or self.dis_acc).."%",
-		exscc_amo = string.format("%04d", self.dis_ex_score),
-		ov_amo = "x"..tostring(self.overflow_bonus),
-		sta_amo = tostring(math.floor(self.dis_stamina)),
-		--
-		pigi_ratio = string.format("%.3f", tostring(self.PIGI_ratio))..":1",
-		--
-		pause_t = "",
-		--
-		sta_pos = 63,
-		auto_pos = 68,
-		--
-		sbs = 960,
-		abs = 160,
-		ofs = 0,
-		--
-		t_y2 = l.ds_sbt == 1 and 12 or 10,
-	}
+	dh.score_t = tostring(self.text.Top.SCORE.." (Rank "..self.dis_currentrank..")")
+	dh.judge_t = tostring(self.text.Top.JUDGE)
+	dh.acc_t = tostring(self.text.Top.ACC)
+	dh.scacc_t = tostring(self.text.Top.ACC.." "..self.text.Top.SCORE)
+	dh.pigi_t = tostring(self.text.Top.PIGI)
+	dh.exsc_t = tostring(self.text.Top.EXSCORE)
+	--
+	dh.score_amo = string.format("%06d", self.dis_score)
+	dh.scacc_amo = string.format("%06d", self.dis_score_2)
+	dh.acc_amo = string.format("%.2f%%", self.dis_acc == 0 and 0 or self.dis_acc)
+	dh.exscc_amo = string.format("%04d", self.dis_ex_score)
+	dh.ov_amo = "x"..tostring(self.overflow_bonus)
+	dh.sta_amo = tostring(math.floor(self.dis_stamina))
+	--
+	dh.pigi_ratio = string.format("%.3f:1", tostring(self.PIGI_ratio))
+	--
+	dh.sta_pos = 63
+	dh.auto_pos = 68
+	--
+	dh.sbs = 960
+	dh.abs = 160
+	dh.ofs = 0
+	--
+	dh.t_y2 = l.ds_sbt == 1 and 12 or 10
 
 	do
 		if self.nameDisplay ~= nil then

@@ -104,6 +104,8 @@
 		"setting:live:vanish:none": "None",
 		"setting:live:vanish:hidden": "Hidden",
 		"setting:live:vanish:sudden": "Sudden",
+		"setting:live:vanish:stealth": "Stealth",
+		"setting:live:noteVisualSize": "Visual Note & Icon size",
 		"setting:volume": "Volume",
 		"setting:volume:effect": "SE Volume",
 		"setting:volume:master": "Master Volume",

@@ -117,6 +117,8 @@
 		"setting:live:vanish:none": "ปกติ",
 		"setting:live:vanish:hidden": "ล่องหนก่อนถึง",
 		"setting:live:vanish:sudden": "ปรากฏก่อนถึง",
+		"setting:live:vanish:stealth": "ไม่ปรากฏ",
+		"setting:live:noteVisualSize": "ขนาดโน้ตและไอคอน",
 
 		"setting:volume": "เสียง",
 		"setting:volume:effect": "ระดับเสียงเอฟเฟค",

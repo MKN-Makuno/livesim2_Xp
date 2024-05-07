@@ -48,7 +48,7 @@ local ColorTheme = {
 
 local currentColor, currentColorDark, currentColorDarker
 
--- colid: 1 = μ's, 2 = Aqours, 3 = NijiGaku
+-- colid: 1 = μ's, 2 = Aqours, 3 = NijiGaku, 4 = Liella, 5 = Hasunosora
 function ColorTheme.init(colid)
 	if currentColor then return end
 	return ColorTheme.set(colid)
