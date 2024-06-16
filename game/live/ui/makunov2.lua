@@ -572,7 +572,7 @@ end
 
 function MakunoV2UI:setMaxStamina(value)
     self.data_maximumstamina = math.min(value, 99)
-    self.data_currentstamina = self.data_maximumstamina * 0.1
+    self.data_currentstamina = self.data_maximumstamina
     self.display_stamina = self.data_currentstamina
 end
 
