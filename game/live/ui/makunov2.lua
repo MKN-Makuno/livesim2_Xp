@@ -718,10 +718,16 @@ end
 
 function MakunoV2UI:addScore(amount)
     
-    local a = math.ceil(amount + (amount * self.data_overflowmultiply))
+    local a 
+    
+    if itf_conf.sy_useoverflow == 1 then
+        a = math.ceil(amount + (amount * self.data_overflowmultiply))
+    else
+        a = math.ceil(amount)
+    end
 
-    if a == 0 then return end
-
+    if (a == 0 or a == nil) then return end
+    
     self.data_currentscore = self.data_currentscore + a
     --
     if self.tween_display_currentscore then
