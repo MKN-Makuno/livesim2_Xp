@@ -77,7 +77,7 @@ local itf_conf = {
         1 - Display as Percentage (Start from 100%)
         2 - Display as 1 Million Points
     ]]
-    dy_accdisplay = 0,
+    dy_accdisplay = 1,
 
     --[[    sy_sif2rank - Display | SIF2 Rank
         Mimic the SIF2 Score Rank system.
@@ -572,7 +572,7 @@ end
 
 function MakunoV2UI:setMaxStamina(value)
     self.data_maximumstamina = math.min(value, 99)
-    self.data_currentstamina = self.data_maximumstamina
+    self.data_currentstamina = self.data_maximumstamina * 0.1
     self.display_stamina = self.data_currentstamina
 end
 
