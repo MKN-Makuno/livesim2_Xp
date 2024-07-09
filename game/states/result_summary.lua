@@ -21,11 +21,11 @@ local CircleIconButton = require("game.ui.circle_icon_button")
 local interpolation = CubicBezier(0.4, 0, 0.2, 1):getFunction()
 local mipmaps = {mipmaps = true}
 local accuracyColorMap = {
-	{color.hexFF0AD8, "PERFECT"},
-	{color.hexFF6854, "GREAT"},
-	{color.hex1DBB1A, "GOOD"},
-	{color.hex1CA0FF, "BAD"},
-	{color.hexFF5C5C, "MISS"}
+	{color.hexF0D400, "PERFECT"},
+	{color.hex47BDFF, "GREAT"},
+	{color.hex52CC4F, "GOOD"},
+	{color.hexF98322, "BAD"},
+	{color.hexFB2256, "MISS"}
 }
 local rankingQuad
 
