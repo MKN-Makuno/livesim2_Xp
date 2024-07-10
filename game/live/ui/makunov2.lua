@@ -228,7 +228,7 @@ function MakunoV2UI:__construct(aupy, mife)
         {fonts.light, 31},      -- Score & Acc number
         {fonts.regular, 14},    -- Sub info number
         {fonts.regular, 20},    -- Combo number & Judgement text
-        {fonts.light, 50},      -- Live result text
+        {fonts.light, 54},      -- Live result text
     })
     self.image = AssetCache.loadMultipleImages(
         {
@@ -478,6 +478,15 @@ end
 function MakunoV2UI:getFailAnimation()
     local TL = {
         t = timer:new(),
+        
+        bg_color = {255, 69, 0, 0.8},
+        text = {
+            font = self.fonts[5], font_h = self.fonts_h[5] * 0.5,
+            str = "LIVE FAILED",
+            x = 480, y = 320, 
+            scale = 0.6,
+            o = 0,
+        }
     }
 
     function TL.update(_, dt)
@@ -485,8 +494,36 @@ function MakunoV2UI:getFailAnimation()
     end
 
     function TL:draw(_, x, y)
+        love.graphics.setBlendMode("add", "alphamultiply")
+        setColor(TL.bg_color)
+        love.graphics.rectangle("fill", -88, -43, 1136, 726)
 
+        setColor(55, 55, 55, TL.text.o * 0.5)
+        love.graphics.printf(spacedtext(TL.text.str), TL.text.font, TL.text.x, TL.text.y + 2, 720, "center", 0, TL.text.scale, TL.text.scale, 360, TL.text.font_h)
+        setColor(255, 255, 255, TL.text.o)
+        love.graphics.printf(spacedtext(TL.text.str), TL.text.font, TL.text.x, TL.text.y, 720, "center", 0, TL.text.scale, TL.text.scale, 360, TL.text.font_h)
     end
+
+    TL.t:tween(200, TL.text, {
+        o = 0.9,
+        scale = 0.99,
+    }, "out-expo")
+
+    TL.t:after(200, function()
+        TL.t:tween(2650, TL.text, {
+            scale = 1,
+        }, "linear")
+    end)
+
+    TL.t:after(2850, function()
+        TL.t:tween(150, TL, {
+            bg_color = {0, 0, 0, 0.75},
+        }, "out-quart")
+
+        TL.t:tween(150, TL.text, {
+            o = 0,
+        }, "out-quart")
+    end)
 
     return TL
 end
@@ -981,12 +1018,15 @@ function MakunoV2UI:addStamina(value)
         self.tween_display_stamina = nil
     end
 
-    self.tween_display_stamina = self.timer:tween(
-        0.35, self, {
-            display_stamina = self.data_currentstamina
-        }, "out-quart"
-    )
-
+    if self.data_currentstamina > 0 then
+        self.tween_display_stamina = self.timer:tween(
+            0.35, self, {
+                display_stamina = self.data_currentstamina
+            }, "out-quart"
+        )
+    else
+        self.display_stamina = 0
+    end
 end
 
 function MakunoV2UI:addTapEffect(x, y, r, g, b, a)
