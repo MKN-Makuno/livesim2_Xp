@@ -676,6 +676,7 @@ function beatmapSelect:load()
 				self.persist.beatmapCoverArt = nil
 				self.persist.selectedBeatmap = nil
 				self.persist.replaysFrame:clear()
+				self.data.difficultyButton:setText("", false)
 				self.data.difficultyDropdown:hide()
 				Glow.removeElement(self.data.deleteBeatmap)
 
