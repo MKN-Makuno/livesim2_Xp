@@ -645,17 +645,17 @@ function MakunoV2UI:update(dt, paused)
     
     if not(paused) then
         self.timer:update(dt)
-    end
 
-    for i = (#itf_score.txt - 1), 1, -1 do
-        if self.display_score >= self.data_scorerank[i] then
-            if (itf_conf.dy_usesuperrank == 0) and i > 4 then i = 4 end
-
-            if self.tween_display_colorrank then self.timer:cancel(self.tween_display_colorrank) end
-            self.tween_display_colorrank = self.timer:tween(1, self.display_scorecolor, retrieveColor(1 + i), "out-expo")
-
-            self.display_ranktext = itf_score.txt[1 + i]
-            break
+        for i = (#itf_score.txt - 1), 1, -1 do
+            if self.display_score >= self.data_scorerank[i] then
+                if (itf_conf.dy_usesuperrank == 0) and i > 4 then i = 4 end
+    
+                if self.tween_display_colorrank then self.timer:cancel(self.tween_display_colorrank) end
+                self.tween_display_colorrank = self.timer:tween(1, self.display_scorecolor, retrieveColor(1 + i), "out-expo")
+    
+                self.display_ranktext = itf_score.txt[1 + i]
+                break
+            end
         end
     end
 
