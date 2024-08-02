@@ -196,7 +196,7 @@ function osuLoader:getNotesList()
 	local internal = Luaoop.class.data(self)
 	local beatmap = {}
 	local offset = -(internal.general.AudioLeanIn or 0)
-	local nkeys = internal.difficulty.CircleSize
+	local nkeys = math.floor(internal.difficulty.CircleSize)
 	local attribute = Setting.get("LLP_SIFT_DEFATTR")
 
 	if internal.general.Mode == 3 then

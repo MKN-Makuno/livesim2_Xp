@@ -21,11 +21,11 @@ local CircleIconButton = require("game.ui.circle_icon_button")
 local interpolation = CubicBezier(0.4, 0, 0.2, 1):getFunction()
 local mipmaps = {mipmaps = true}
 local accuracyColorMap = {
-	{color.hexFF0AD8, "PERFECT"},
-	{color.hexFF6854, "GREAT"},
-	{color.hex1DBB1A, "GOOD"},
-	{color.hex1CA0FF, "BAD"},
-	{color.hexFF5C5C, "MISS"}
+	{color.hexBE8C00, "PERFECT"},
+	{color.hex47BDFF, "GREAT"},
+	{color.hex52CC4F, "GOOD"},
+	{color.hexF98322, "BAD"},
+	{color.hexFB2256, "MISS"}
 }
 local rankingQuad
 
@@ -54,6 +54,12 @@ end
 
 local function leave()
 	Gamestate.leave(LoadingInstance.getInstance())
+end
+
+local function skipResultTween(self)
+	if not(self) then return end
+	self.persist.graphTimer = 3
+	self.persist.statusTimer = 5.7
 end
 
 function resultScreen:load(arg)
@@ -291,7 +297,7 @@ function resultScreen:start(arg)
 end
 
 function resultScreen:update(dt)
-	local needRefresh = self.persist.graphTimer < 3
+	local needRefresh = self.persist.graphTimer <= 3
 	if needRefresh then
 		self.persist.graphTimer = math.min(self.persist.graphTimer + dt, 3)
 	end
@@ -396,6 +402,12 @@ end
 resultScreen:registerEvent("keyreleased", function(_, key)
 	if key == "escape" then
 		return leave()
+	end
+end)
+
+resultScreen:registerEvent("mousepressed", function(self, _, _, b, ist)
+	if ist or b <= 2 then
+		return skipResultTween(self)
 	end
 end)
 

@@ -226,7 +226,7 @@ do
 		love.graphics.setColor(color.hexFFDF35)
 		love.graphics.rectangle("fill", x, y, self.width, self.height, 20, 20)
 		love.graphics.rectangle("line", x, y, self.width, self.height, 20, 20)
-		love.graphics.setColor(color.white)
+		love.graphics.setColor(color.black)
 		love.graphics.draw(self.image, x + 12, y + 7, 0, 0.32)
 		Util.drawText(self.text, x + 37, y + 12)
 
@@ -676,6 +676,7 @@ function beatmapSelect:load()
 				self.persist.beatmapCoverArt = nil
 				self.persist.selectedBeatmap = nil
 				self.persist.replaysFrame:clear()
+				self.data.difficultyButton:setText("", false)
 				self.data.difficultyDropdown:hide()
 				Glow.removeElement(self.data.deleteBeatmap)
 

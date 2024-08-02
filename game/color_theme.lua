@@ -4,7 +4,7 @@
 
 local color = require("color")
 local ColorTheme = {
-	[1] = {
+	[1] = {	-- µ's
 		-- ff4fae
 		currentColor = {0xff, 0x4f, 0xae, color.hexFF4FAE},
 		-- ef46a1
@@ -12,7 +12,7 @@ local ColorTheme = {
 		-- c31c76
 		currentColorDarker = {0xc3, 0x1c, 0x76, color.hexC31C76}
 	},
-	[2] = {
+	[2] = {	-- Aqours
 		-- 46baff
 		currentColor = {0x46, 0xba, 0xff, color.hex46BAFF},
 		-- 3bacf0
@@ -20,7 +20,7 @@ local ColorTheme = {
 		-- 007ec6
 		currentColorDarker = {0x00, 0x7e, 0xc6, color.hex007EC6}
 	},
-	[3] = {
+	[3] = { -- NijiGaku
 		-- ffc22e
 		currentColor = {0xff, 0xc2, 0x2e, color.hexFFC22E},
 		-- e8b126
@@ -28,7 +28,7 @@ local ColorTheme = {
 		-- ac7b0a
 		currentColorDarker = {0xac, 0x7b, 0x0a, color.hexAC7B0A}
 	},
-	[4] = {
+	[4] = { -- Liella
 		-- d991d8
 		currentColor = {0xd9, 0x91, 0xd8, color.hexD991D8},
 		-- cc6bcb
@@ -36,19 +36,36 @@ local ColorTheme = {
 		-- bf45bd
 		currentColorDarker = {0xbf, 0x45, 0xbd, color.hexBF45BD}
 	},
-	[5] = {
+	[5] = {	-- Hasunosora
 		-- fb9ba9
 		currentColor = {0xfb, 0x9b, 0xa9, color.hexFB9BA9},
 		-- fb8a9b
 		currentColorDark = {0xfb, 0x8a, 0x9b, color.hexFB8A9B},
 		-- fb7085
 		currentColorDarker = {0xfb, 0x70, 0x85, color.hexFB7085}
+	},
+	[6] = {	-- (School Idol) Musical
+		-- f70042
+		currentColor = {0xf7, 0x09, 0x42, color.hexF70042},
+		-- de003b
+		currentColorDark = {0xde, 0x00, 0x3b, color.hexDE003B},
+		-- c40035
+		currentColorDarker = {0xc4, 0x00, 0x35, color.hexC40035}
+	},
+	[7] = {	-- Yohane (the Parhelion)
+		-- 23a2b0
+		currentColor = {0x23, 0xa2, 0xb0, color.hex23A2B0},
+		-- 1e8a96
+		currentColorDark = {0x1e, 0x8a, 0x96, color.hex1E8A96},
+		-- 19737d
+		currentColorDarker = {0x19, 0x73, 0x7d, color.hex19737D}
 	}
 }
 
 local currentColor, currentColorDark, currentColorDarker
 
 -- colid: 1 = μ's, 2 = Aqours, 3 = NijiGaku, 4 = Liella, 5 = Hasunosora
+-- 6 = Musical, 7 = Yohane
 function ColorTheme.init(colid)
 	if currentColor then return end
 	return ColorTheme.set(colid)

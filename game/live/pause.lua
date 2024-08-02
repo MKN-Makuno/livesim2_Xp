@@ -188,7 +188,7 @@ function Pause:mouseReleased(x, y)
 end
 
 function Pause:fastResume()
-	if self.paused then
+	if self.paused and not(self.isFailed) then
 		self.callback.resume(self.opaque)
 		self.timer = math.huge
 		self.paused = false
