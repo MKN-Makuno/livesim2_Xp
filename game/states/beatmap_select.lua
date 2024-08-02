@@ -87,7 +87,7 @@ do
 		love.graphics.setColor(self.selected and ColorTheme.get() or color.hex434242)
 		love.graphics.rectangle("fill", x, y, self.width, self.height)
 		love.graphics.setShader(Util.drawText.workaroundShader)
-		love.graphics.setColor(color.black)
+		love.graphics.setColor(color.white)
 		love.graphics.draw(self.name, x + 110, y + 20)
 		love.graphics.draw(self.format, x + 110, y + 60)
 
@@ -226,7 +226,7 @@ do
 		love.graphics.setColor(color.hexFFDF35)
 		love.graphics.rectangle("fill", x, y, self.width, self.height, 20, 20)
 		love.graphics.rectangle("line", x, y, self.width, self.height, 20, 20)
-		love.graphics.setColor(color.white)
+		love.graphics.setColor(color.black)
 		love.graphics.draw(self.image, x + 12, y + 7, 0, 0.32)
 		Util.drawText(self.text, x + 37, y + 12)
 
