@@ -126,6 +126,7 @@ function Util.releaseObject(obj)
 end
 
 ---@param sounddata love.SoundData
+---@return integer
 function Util.getChannelCount(sounddata)
 	if version11 then return sounddata:getChannelCount()
 	else return sounddata:getChannels() end
@@ -277,6 +278,8 @@ function Util.isMobile()
 	return love._os == "iOS" or love._os == "Android"
 end
 
+---@param path love.FileData|love.File|string
+---@return love.Decoder
 function Util.newDecoder(path)
 	if hasLVEP then
 		local s, v = pcall(love.sound.newDecoder, path)
@@ -538,6 +541,12 @@ function Util.split(text, delim, removeempty)
 	return t
 end
 
+---@param obj any
+---@param lovetype string?
+---@return boolean
+function Util.isLOVEType(obj, lovetype)
+	return type(obj) == "userdata" and obj.typeOf and obj:typeOf(lovetype or "Object")
+end
 
 if version11 then
 	local fontDPIScale = 1

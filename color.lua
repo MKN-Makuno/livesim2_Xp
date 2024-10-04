@@ -32,6 +32,7 @@ local function hexCache(hexcode)
 	return v
 end
 
+---@class color:{[string]:number[]}
 local color = setmetatable({}, {
 	__index = function(color, var)
 		if var:find("hex", 1, true) == 1 then

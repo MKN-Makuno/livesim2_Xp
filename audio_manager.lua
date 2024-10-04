@@ -28,6 +28,7 @@ local AudioManager = {
 }
 
 -- must be called before any audio is loaded or the behaviour is undefined
+---@param rate integer
 function AudioManager.setRenderFramerate(rate)
 	if rate > 0 then
 		local smpPerFrame = 48000/rate
@@ -120,8 +121,11 @@ function AudioManager.newAudio(path, kind)
 	end
 end
 
+---@param data love.SoundData|love.Decoder|love.Data|love.File
+---@param kind string
+---@return livesim2.AudioManager.Object
 function AudioManager.newAudioDirect(data, kind)
-	--kind = kind or "master"
+	---@class livesim2.AudioManager.Object
 	local obj = {
 		pos = 0,
 		size = 0,
@@ -129,19 +133,24 @@ function AudioManager.newAudioDirect(data, kind)
 		volumeKind = kind,
 		playing = false,
 		looping = false,
+		---@type love.SoundData|nil
 		soundData = nil,
 		soundDataPointer = nil,
+		---@type love.SoundData|nil
 		originalSoundData = nil,
+		---@type integer
 		channelCount = nil,
+		---@type love.Source
 		source = nil,
 	}
 	if AudioManager.renderRate > 0 then
 		-- render mode requires 48000Hz
-		if type(data) == "userdata" and not(data:typeOf("SoundData")) then
+		if Util.isLOVEType(data) and not Util.isLOVEType(data, "SoundData") then
 			local sdAsync = Async.syncLily(lily.newSoundData(data))
 			data = sdAsync:getValues() -- automatically sync
 		end
 
+		---@cast data love.SoundData
 		obj.channelCount = Util.getChannelCount(data)
 
 		-- check sample rate
@@ -169,7 +178,8 @@ function AudioManager.newAudioDirect(data, kind)
 		obj.soundDataPointer = ffi.cast("short*", data:getPointer())
 		return obj
 	else
-		if type(data) == "userdata" and data:typeOf("SoundData") then
+		if Util.isLOVEType(data, "SoundData") then
+			---@cast data love.SoundData
 			obj.soundData = data
 			obj.source = love.audio.newSource(data)
 		else
@@ -181,7 +191,9 @@ function AudioManager.newAudioDirect(data, kind)
 	end
 end
 
+---@param obj livesim2.AudioManager.Object
 function AudioManager.clone(obj)
+	---@class livesim2.AudioManager.Object
 	local x = {
 		pos = 0,
 		size = obj.size,
@@ -200,6 +212,7 @@ function AudioManager.clone(obj)
 	return x
 end
 
+---@param obj livesim2.AudioManager.Object
 function AudioManager.play(obj)
 	if AudioManager.renderRate > 0 then
 		if obj.playing then return end
@@ -210,6 +223,7 @@ function AudioManager.play(obj)
 	end
 end
 
+---@param obj livesim2.AudioManager.Object
 function AudioManager.pause(obj)
 	if AudioManager.renderRate > 0 then
 		if not(obj.playing) then return end
@@ -226,6 +240,7 @@ function AudioManager.pause(obj)
 	end
 end
 
+---@param obj livesim2.AudioManager.Object
 function AudioManager.stop(obj)
 	if AudioManager.renderRate > 0 then
 		AudioManager.pause(obj)
@@ -235,6 +250,7 @@ function AudioManager.stop(obj)
 	end
 end
 
+---@param obj livesim2.AudioManager.Object
 function AudioManager.isLooping(obj)
 	if AudioManager.renderRate > 0 then
 		return obj.looping
@@ -243,6 +259,7 @@ function AudioManager.isLooping(obj)
 	end
 end
 
+---@param obj livesim2.AudioManager.Object
 function AudioManager.setLooping(obj, loop)
 	if AudioManager.renderRate > 0 then
 		obj.looping = loop
@@ -251,6 +268,7 @@ function AudioManager.setLooping(obj, loop)
 	end
 end
 
+---@param obj livesim2.AudioManager.Object
 function AudioManager.isPlaying(obj)
 	if AudioManager.renderRate > 0 then
 		return obj.playing
@@ -259,6 +277,8 @@ function AudioManager.isPlaying(obj)
 	end
 end
 
+---@param obj livesim2.AudioManager.Object
+---@param vol number
 function AudioManager.setVolume(obj, vol)
 	vol = Volume.get(obj.volumeKind, vol)
 	if AudioManager.renderRate > 0 then
@@ -268,6 +288,8 @@ function AudioManager.setVolume(obj, vol)
 	end
 end
 
+---@param obj livesim2.AudioManager.Object
+---@param seconds number
 function AudioManager.seek(obj, seconds)
 	if AudioManager.renderRate > 0 then
 		obj.pos = 48000 * seconds
