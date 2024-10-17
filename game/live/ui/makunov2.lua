@@ -944,7 +944,7 @@ function MakunoV2UI:addStamina(value)
             local remain_stamina = self.data_maximumstamina - self.data_currentstamina
             local remain_forover = a - remain_stamina
 
-            if (self.data_currentoverflow + remain_forover) >= self.data_maximumstamina and itf_conf.sy_useoverflow == 1 then
+            if itf_conf.sy_useoverflow == 1 and (self.data_currentoverflow + remain_forover) >= self.data_maximumstamina then
                 -- Applies bonus (not) similar to SIF1 does
                 local remain_curover = self.data_maximumstamina - self.data_currentoverflow
                 local rest_over = remain_forover - remain_curover
