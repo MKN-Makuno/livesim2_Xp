@@ -209,6 +209,7 @@ end
 
 ---Spaced Out the letters
 ---@param text string
+---@return string
 local function spacedtext(text)
 
     local t = tostring(text)
@@ -445,7 +446,12 @@ function MakunoV2UI:__construct(aupy, mife)
         love.graphics.polygon("fill", 679, self.display_global.mb_line_y1, 679, self.display_global.mb_line_y2, 667, self.display_global.mb_line_y2)
     end
 
+    -- Cut the line the creep through score bar
     self.sten_stencil5 = function()
+        love.graphics.rectangle("fill", self.display_global.lb_x1 - 10, self.display_global.mb_line_y1 - 12, self.display_global.rb_x2 - self.display_global.lb_x1 + 15, 13)
+    end
+
+    self.sten_stencil6 = function()
         love.graphics.polygon("fill", self.display_global.lb_x1, self.display_global.mb_line_y1, 281, self.display_global.mb_line_y1, 293, self.display_global.mb_line_y2, self.display_global.lb_x2, self.display_global.mb_line_y2)
         love.graphics.polygon("fill", 679, self.display_global.mb_line_y1, self.display_global.rb_x2, self.display_global.mb_line_y1, self.display_global.rb_x1, self.display_global.mb_line_y2, 667, self.display_global.mb_line_y2)
     end
@@ -1283,6 +1289,9 @@ function MakunoV2UI:drawStatus()
 
         love.graphics.setStencilTest()
         
+        love.graphics.stencil(self.sten_stencil5, "increment", 1)
+        love.graphics.setStencilTest("equal", 0)
+
         setColor(65, 65, 65, self.display_element_opacity * 0.2)
         love.graphics.line(self.display_global.lb_x1, self.display_global.mb_line_y1 + 2, self.display_global.lb_x2, self.display_global.mb_line_y2 + 2, self.display_global.rb_x1, self.display_global.mb_line_y2 + 2, self.display_global.rb_x2, self.display_global.mb_line_y1 + 2)
 
@@ -1295,6 +1304,7 @@ function MakunoV2UI:drawStatus()
         love.graphics.line(667, self.display_global.mb_line_y2, self.display_global.rb_x1, self.display_global.mb_line_y2, self.display_global.rb_x2, self.display_global.mb_line_y1)
         love.graphics.line(281, self.display_global.mb_line_y1, 293, self.display_global.mb_line_y2, 667, self.display_global.mb_line_y2, 679, self.display_global.mb_line_y1)
         
+        love.graphics.setStencilTest()
     end
 
     ----------------------------------------
@@ -1314,7 +1324,7 @@ function MakunoV2UI:drawStatus()
         ds_sn.n_stam = string.format("%.0f", self.display_stamina + self.display_overflowstamina)
         ds_sn.n_ovbon = tostring("x"..self.data_overflowbonus)
 
-        love.graphics.stencil(self.sten_stencil5, "increment", 1)
+        love.graphics.stencil(self.sten_stencil6, "increment", 1)
         love.graphics.setStencilTest("gequal", 1)
 
         setColor(25, 25, 25, self.display_element_opacity * self.display_global.stami_opa * 0.3)
