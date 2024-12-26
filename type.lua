@@ -36,7 +36,7 @@ end
 ---@field public star integer
 local SummaryInfo = {}
 
----@class Livesim2.SrtParseData
+---@class livesim2.SrtParseData
 ---@field public start number
 ---@field public stop number
 ---@field public text1 string

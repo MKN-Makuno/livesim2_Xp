@@ -6,13 +6,16 @@ local Volume = {
 	list = {master = 0.8}
 }
 
--- volume default initialized to 0.8
+---@param name string
+---@param value number
 function Volume.define(name, value)
 	assert(Volume.list[name] == nil, "name already defined")
 	Volume.list[name] = assert(tonumber(value), "invalid default volume")
 end
 
--- value default to 1 if not specified
+---value default to 1 if not specified
+---@param name string
+---@param value number?
 function Volume.get(name, value)
 	assert(Volume.list[name], "name doesn't exist")
 	value = value or 1
@@ -23,7 +26,9 @@ function Volume.get(name, value)
 	end
 end
 
--- usually settings set the volume
+---usually settings set the volume
+---@param name string
+---@param value number
 function Volume.set(name, value)
 	Volume.list[name] = assert(tonumber(value), "invalid volume")
 end

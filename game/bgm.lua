@@ -8,13 +8,16 @@ local AudioManager = require("audio_manager")
 local Util = require("util")
 
 local BGM = {}
+---@class livesim2.BGM
 local BGMClass = Luaoop.class("livesim2.BGM")
 
+---@param sd love.SoundData|love.Decoder|love.Data|love.File
 function BGMClass:__construct(sd)
 	if not(sd:typeOf("SoundData")) then
 		sd = love.sound.newSoundData(sd)
 	end
 
+	---@cast sd love.SoundData
 	self.audio = AudioManager.newAudioDirect(sd, "music")
 	self.channel = Util.getChannelCount(sd)
 	self.soundData = sd
@@ -33,11 +36,17 @@ function BGMClass:rewind()
 	return AudioManager.play(self.audio)
 end
 
+---@param sd love.SoundData
+---@param pos integer
 function BGMClass._getSampleSafe(sd, pos)
 	local s, v = pcall(sd.getSample, sd, pos)
 	return s and v or 0
 end
 
+---@param output number[]
+---@param sd love.SoundData
+---@param pos integer
+---@param amount integer
 function BGMClass:_populateSample(output, sd, pos, amount)
 	if self.channel == 1 then
 		-- mono
@@ -55,6 +64,8 @@ function BGMClass:_populateSample(output, sd, pos, amount)
 	end
 end
 
+---@param output number[]
+---@param amount integer
 function BGMClass:_getSamplesRender(output, amount)
 	-- Use original sound data
 	local sd, pos
@@ -71,6 +82,8 @@ function BGMClass:_getSamplesRender(output, amount)
 end
 
 -- interleaved samples: {l, r, l, r, l, r, ...}
+---@param amount integer
+---@return number[]
 function BGMClass:getSamples(amount)
 	local output = {}
 	if AudioManager.renderRate > 0 then
@@ -82,6 +95,7 @@ function BGMClass:getSamples(amount)
 	return output
 end
 
+---@param timepos number
 function BGMClass:seek(timepos)
 	return AudioManager.seek(self.audio, timepos)
 end
@@ -106,6 +120,8 @@ function BGMClass:getSampleRate()
 	end
 end
 
+---@param decoder love.FileData|love.File|string
+---@return livesim2.BGM
 function BGM.newSong(decoder)
 	return BGMClass(Util.newDecoder(decoder))
 end

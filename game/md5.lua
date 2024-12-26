@@ -10,10 +10,6 @@ local Util = require("util")
 local md5impl
 local md5implfb
 
-local function isData(t)
-	return type(t) == "userdata" and t:typeOf("Data")
-end
-
 function md5implfb(code)
 	if type(code) == "userdata" and code:typeOf("Data") then
 		return md5fb.sum(code:getString())
@@ -29,8 +25,10 @@ if Util.compareLOVEVersion(11, 0) >= 0 then
 	end
 end
 
+---@param code string
+---@return string
 return function(code)
-	local len = isData(code) and code:getSize() or #code
+	local len = Util.isLOVEType(code, "Data") and code:getSize() or #code
 	-- https://bitbucket.org/rude/love/issues/1453
 	-- https://bitbucket.org/rude/love/pull-requests/117
 	-- LOVE 11.2 and earlier produces wrong hash for

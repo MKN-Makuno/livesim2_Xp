@@ -8,7 +8,7 @@ end
 
 ---@param iter fun():(string|nil)
 return function(iter)
-	---@type Livesim2.SrtParseData[]
+	---@type livesim2.SrtParseData[]
 	local res = {}
 
 	-- ignore sub number, unnecessary

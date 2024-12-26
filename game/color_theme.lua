@@ -66,11 +66,13 @@ local currentColor, currentColorDark, currentColorDarker
 
 -- colid: 1 = μ's, 2 = Aqours, 3 = NijiGaku, 4 = Liella, 5 = Hasunosora
 -- 6 = Musical, 7 = Yohane
+---@param colid integer
 function ColorTheme.init(colid)
 	if currentColor then return end
 	return ColorTheme.set(colid)
 end
 
+---@param colid integer
 function ColorTheme.set(colid)
 	if ColorTheme[colid] == nil then
 		error("unknown color id "..colid)
@@ -81,6 +83,7 @@ function ColorTheme.set(colid)
 	currentColorDarker = ColorTheme[colid].currentColorDarker
 end
 
+---@param opacity number
 function ColorTheme.get(opacity)
 	assert(currentColor, "forgot to call colorTheme.init()")
 	if opacity then
@@ -90,6 +93,7 @@ function ColorTheme.get(opacity)
 	end
 end
 
+---@param opacity number
 function ColorTheme.getDark(opacity)
 	assert(currentColorDark, "forgot to call colorTheme.init()")
 	if opacity then
@@ -99,7 +103,7 @@ function ColorTheme.getDark(opacity)
 	end
 end
 
-
+---@param opacity number
 function ColorTheme.getDarker(opacity)
 	assert(currentColorDarker, "forgot to call colorTheme.init()")
 	if opacity then

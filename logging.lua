@@ -45,6 +45,7 @@ if not(level) or (level < 0 or level > 4) then
 		level = 2
 	end
 end
+level = math.floor(level)
 
 -- Default implementation
 local function infoImpl(tag, text)
@@ -250,6 +251,8 @@ local function initMutex()
 	return not(not(log.mutex))
 end
 
+---@param tag string
+---@param text string
 function log.info(tag, text)
 	if level >= 3 then
 		if initMutex() then
@@ -260,10 +263,14 @@ function log.info(tag, text)
 	end
 end
 
+---@param tag string
+---@param text string
 function log.infof(tag, text, ...)
 	return log.info(tag, string.format(text, ...))
 end
 
+---@param tag string
+---@param text string
 function log.warning(tag, text)
 	if level >= 2 then
 		if level >= 4 then
@@ -279,11 +286,15 @@ function log.warning(tag, text)
 end
 log.warn = log.warning
 
+---@param tag string
+---@param text string
 function log.warningf(tag, text, ...)
 	return log.warning(tag, string.format(text, ...))
 end
 log.warnf = log.warningf
 
+---@param tag string
+---@param text string
 function log.error(tag, text)
 	if level >= 1 then
 		if level >= 4 then
@@ -298,10 +309,14 @@ function log.error(tag, text)
 	end
 end
 
+---@param tag string
+---@param text string
 function log.errorf(tag, text, ...)
 	return log.error(tag, string.format(text, ...))
 end
 
+---@param tag string
+---@param text string
 function log.debug(tag, text)
 	if level >= 4 then
 		if initMutex() then
@@ -312,6 +327,8 @@ function log.debug(tag, text)
 	end
 end
 
+---@param tag string
+---@param text string
 function log.debugf(tag, text, ...)
 	return log.debug(tag, string.format(text, ...))
 end
