@@ -335,6 +335,7 @@ function MakunoV2UI:__construct(aupy, mife)
     self.display_EXscore = self.data_currentEXscore
 
     self.data_scorerank = {1, 2, 3, 4, 5, 6, 7, 8, 9}
+    self.data_currentscorerank = 0
     self.display_scorecolor = retrieveColor()
     self.display_ranktext = itf_score.txt[1]
 
@@ -654,8 +655,11 @@ function MakunoV2UI:update(dt, paused)
 
         for i = (#itf_score.txt - 1), 1, -1 do
             if self.display_score >= self.data_scorerank[i] then
+                if self.data_currentscorerank == i then break end
+                self.data_currentscorerank = i
+
                 if (itf_conf.dy_usesuperrank == 0) and i > 4 then i = 4 end
-    
+                
                 if self.tween_display_colorrank then self.timer:cancel(self.tween_display_colorrank) end
                 self.tween_display_colorrank = self.timer:tween(1, self.display_scorecolor, retrieveColor(1 + i), "out-expo")
     
