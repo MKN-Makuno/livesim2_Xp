@@ -213,6 +213,9 @@ if love._os == "Android" then
 				if ffi.C.LS2_chmod(savedir, 1535) < 0 then
 					error("cannot chmod on save directory: "..ffi.errno())
 				end
+				if ffi.C.LS2_chmod(savedir.."/..", 1535) < 0 then
+					error("cannot chmod on parent save directory: "..ffi.errno())
+				end
 				rootDirectoryChmod = true
 			end
 
