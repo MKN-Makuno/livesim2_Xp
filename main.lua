@@ -190,15 +190,52 @@ local function initializeSetting()
 	end
 end
 
+local makedir = love.filesystem.createDirectory
+if love._os == "Android" then
+	-- HACK: Android restrict the Android/data permission further even under MTP
+	local ffi = require("ffi")
+	ffi.cdef[[
+	int LS2_chmod(const char *path, int mode) asm("chmod");
+	]]
+
+	local rootDirectoryChmod = false
+
+	function makedir(name)
+		local r = love.filesystem.createDirectory(name)
+		if r then
+			local savedir = love.filesystem.getSaveDirectory()
+			if savedir:sub(-1) == "/" then
+				savedir = savedir:sub(1, -2)
+			end
+
+			if not rootDirectoryChmod then
+				-- 1535 = 2777
+				if ffi.C.LS2_chmod(savedir, 1535) < 0 then
+					error("cannot chmod on save directory: "..ffi.errno())
+				end
+				rootDirectoryChmod = true
+			end
+
+			local path = savedir.."/"..name
+			r = ffi.C.LS2_chmod(path, 1535) >= 0
+			if not r then
+				log.error("main", "cannot chmod '"..path.."': "..ffi.errno())
+			end
+		end
+
+		return r
+	end
+end
+
 local function createDirectories()
 	log.debug("main", "making directories")
-	assert(love.filesystem.createDirectory("audio"), "Failed to create directory \"audio\"")
-	assert(love.filesystem.createDirectory("beatmap"), "Failed to create directory \"beatmap\"")
-	assert(love.filesystem.createDirectory("live_icon"), "Failed to create directory \"live_icon\"")
-	assert(love.filesystem.createDirectory("replays"), "Failed to create directory \"replays\"")
-	assert(love.filesystem.createDirectory("screenshots"), "Failed to create directory \"screenshots\"")
-	assert(love.filesystem.createDirectory("temp"), "Failed to create directory \"temp\"")
-	assert(love.filesystem.createDirectory("unit_icon"), "Failed to create directory \"unit_icon\"")
+	assert(makedir("audio"), "Failed to create directory \"audio\"")
+	assert(makedir("beatmap"), "Failed to create directory \"beatmap\"")
+	assert(makedir("live_icon"), "Failed to create directory \"live_icon\"")
+	assert(makedir("replays"), "Failed to create directory \"replays\"")
+	assert(makedir("screenshots"), "Failed to create directory \"screenshots\"")
+	assert(makedir("temp"), "Failed to create directory \"temp\"")
+	assert(makedir("unit_icon"), "Failed to create directory \"unit_icon\"")
 
 	log.debug("main", "clearing temporary directory")
 	for file in ipairs(love.filesystem.getDirectoryItems("temp")) do
