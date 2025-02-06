@@ -324,7 +324,7 @@ end
 if version12 then
 	function Util.stencil11(fn, action, value, keepvalue)
 		love.graphics.setColorMask(false)
-		love.graphics.setStencilMode(action, "always", value)
+		love.graphics.setStencilMode("draw", action, value)
 		if not keepvalue then
 			love.graphics.clear(false, true, false)
 		end
@@ -335,7 +335,7 @@ if version12 then
 
 	function Util.setStencilTest11(cmp, val)
 		if cmp then
-			love.graphics.setStencilMode("keep", cmp, val)
+			love.graphics.setStencilMode("test", cmp, val)
 		else
 			love.graphics.setStencilMode()
 		end
