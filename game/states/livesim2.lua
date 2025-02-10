@@ -1206,32 +1206,32 @@ DEPLS:registerEvent("resize", function(self, w, h)
 	end
 end)
 
-DEPLS:registerEvent("keypressed", function(self, key, _, rep)
+DEPLS:registerEvent("keypressed", function(self, _, scancode, rep)
 	if self.persist.render then return end
 	if not(self.persist.coverArtDisplayDone) then return end
-	log.debugf("livesim2", "keypressed, key: %s, repeat: %s", key, tostring(rep))
+	log.debugf("livesim2", "keypressed, scancode: %s, repeat: %s", scancode, tostring(rep))
 
 	if
 		not(rep) and
 		not(self.persist.replayMode) and
 		not(self.data.pauseObject:isPaused()) and
-		self.persist.keymap[key]
+		self.persist.keymap[scancode]
 	then
 		if not(self.persist.autoplay) then
-			replay.recordKeypressed(self.persist.keymap[key])
+			replay.recordKeypressed(self.persist.keymap[scancode])
 		end
-		return self.data.noteManager:setTouch(self.persist.keymap[key], key)
+		return self.data.noteManager:setTouch(self.persist.keymap[scancode], scancode)
 	end
 end)
 
-DEPLS:registerEvent("keyreleased", function(self, key)
+DEPLS:registerEvent("keyreleased", function(self, _, scancode)
 	if self.persist.render then return end
 	if not(self.persist.coverArtDisplayDone) then return end
-	log.debugf("livesim2", "keypressed, key: %s", key)
+	log.debugf("livesim2", "keypressed, scancode: %s", scancode)
 
 	local isPaused = self.data.pauseObject:isPaused()
 
-	if key == "escape" then
+	if scancode == "escape" then
 		if love._os == "Android" then
 			if self.persist.liveDelayCounter <= 0 and not(isPaused) then
 				return pauseGame(self)
@@ -1241,7 +1241,7 @@ DEPLS:registerEvent("keyreleased", function(self, key)
 		else
 			return Gamestate.leave(LoadingInstance.getInstance())
 		end
-	elseif key == "pause" then
+	elseif scancode == "pause" then
 		if isPaused then
 			return self.data.pauseObject:fastResume()
 		elseif self.persist.liveDelayCounter <= 0 then
@@ -1249,11 +1249,11 @@ DEPLS:registerEvent("keyreleased", function(self, key)
 		end
 	end
 
-	if not(self.persist.replayMode) and not(isPaused) and self.persist.keymap[key] then
+	if not(self.persist.replayMode) and not(isPaused) and self.persist.keymap[scancode] then
 		if not(self.persist.autoplay) then
-			replay.recordKeyreleased(self.persist.keymap[key])
+			replay.recordKeyreleased(self.persist.keymap[scancode])
 		end
-		return self.data.noteManager:setTouch(self.persist.keymap[key], key, true)
+		return self.data.noteManager:setTouch(self.persist.keymap[scancode], scancode, true)
 	end
 end)
 
