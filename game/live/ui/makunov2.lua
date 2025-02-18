@@ -1117,7 +1117,6 @@ end
 -- Most of the element
 local dst, dsn, dse = {
     t_score = nil,
-    t_accscore = nil,
     t_acc = nil,
     t_pigi = nil,
     t_exsc = nil,
@@ -1126,7 +1125,6 @@ local dst, dsn, dse = {
 }, {
     n_score = nil,
     n_acc = nil,
-    n_accscore = nil,
     n_pigi = nil,
     n_exsc = nil,
     n_combo = nil,
@@ -1154,16 +1152,24 @@ local ds_se, ds_sn = {
 }
 function MakunoV2UI:drawStatus()
     
+    if itf_conf.dy_accdisplay == 2 then
+        dst.t_acc = tostring(self.display_text.top.ACC.." "..self.display_text.top.SCO)
+    else
+        dst.t_acc = tostring(self.display_text.top.ACC)
+    end
+
     dst.t_score = tostring(self.display_text.top.SCO.." - RANK "..self.display_ranktext)
-    dst.t_accscore = tostring(self.display_text.top.ACC.." "..self.display_text.top.SCO)
-    dst.t_acc = tostring(self.display_text.top.ACC)
     dst.t_pigi = tostring(self.display_text.top.PGR)
     dst.t_exsc = tostring(self.display_text.top.EXS)
     dst.t_judge = spacedtext(self.display_judgement_text)
     
+    if itf_conf.dy_accdisplay == 2 then
+        dsn.n_acc = string.format("%.0f", self.display_accuracy*10000):reverse():gsub("(%d%d%d)","%1,"):gsub(",(%-?)$", "%1"):reverse()
+    else
+        dsn.n_acc = string.format("%.2f%%", self.display_accuracy)
+    end
+
     dsn.n_score = string.format("%.0f", self.display_score):reverse():gsub("(%d%d%d)","%1,"):gsub(",(%-?)$", "%1"):reverse()
-    dsn.n_acc = string.format("%.2f%%", self.display_accuracy)
-    dsn.n_accscore = string.format("%.0f", self.display_accuracy*10000):reverse():gsub("(%d%d%d)","%1,"):gsub(",(%-?)$", "%1"):reverse()
     dsn.n_exsc = string.format("%.0f", self.display_EXscore)
     dsn.n_combo = tostring(self.data_currentcombo)
     dsn.n_comboburst = tostring(self._next_comboburst - 100)
@@ -1351,27 +1357,15 @@ function MakunoV2UI:drawStatus()
     love.graphics.stencil(self.sten_stencil2, "increment", 1)
     love.graphics.setStencilTest("gequal", 1)
 
-    if itf_conf.dy_accdisplay == 2 then
-        setColor(self.display_scorecolor, self.display_text_opacity * 0.3)
-        love.graphics.printf(dsn.n_accscore, self.fonts[2], self.display_global.L_topnum_x - 1.2, self.display_global.L_topnum_y + 1.2, 360, "left", 0, 1, 1, 0, self.fonts_h[2])
+    setColor(self.display_scorecolor, self.display_text_opacity * 0.3)
+    love.graphics.printf(dsn.n_acc, self.fonts[2], self.display_global.L_topnum_x - 1.2, self.display_global.L_topnum_y + 1.2, 360, "left", 0, 1, 1, 0, self.fonts_h[2])
 
-        setColor(25, 25, 25, self.display_text_opacity * 0.3)
-        love.graphics.printf(dst.t_accscore, self.fonts[1], self.display_global.L_toptext_x - 1.1, self.display_global.L_toptext_y + 1.1, 360, "left", 0, 1, 1, 0, 0)
+    setColor(25, 25, 25, self.display_text_opacity * 0.3)
+    love.graphics.printf(dst.t_acc, self.fonts[1], self.display_global.L_toptext_x  - 1.1, self.display_global.L_toptext_y + 1.1, 360, "left", 0, 1, 1, 0, 0)
 
-        setColor(255, 255, 255, self.display_text_opacity * 0.9)
-        love.graphics.printf(dsn.n_accscore, self.fonts[2], self.display_global.L_topnum_x, self.display_global.L_topnum_y, 360, "left", 0, 1, 1, 0, self.fonts_h[2])
-        love.graphics.printf(dst.t_accscore, self.fonts[1], self.display_global.L_toptext_x, self.display_global.L_toptext_y, 360, "left", 0, 1, 1, 0, 0)
-    else
-        setColor(self.display_scorecolor, self.display_text_opacity * 0.3)
-        love.graphics.printf(dsn.n_acc, self.fonts[2], self.display_global.L_topnum_x - 1.2, self.display_global.L_topnum_y + 1.2, 360, "left", 0, 1, 1, 0, self.fonts_h[2])
-
-        setColor(25, 25, 25, self.display_text_opacity * 0.3)
-        love.graphics.printf(dst.t_acc, self.fonts[1], self.display_global.L_toptext_x  - 1.1, self.display_global.L_toptext_y + 1.1, 360, "left", 0, 1, 1, 0, 0)
-
-        setColor(255, 255, 255, self.display_text_opacity * 0.9)
-        love.graphics.printf(dsn.n_acc, self.fonts[2], self.display_global.L_topnum_x, self.display_global.L_topnum_y, 360, "left", 0, 1, 1, 0, self.fonts_h[2])
-        love.graphics.printf(dst.t_acc, self.fonts[1], self.display_global.L_toptext_x, self.display_global.L_toptext_y, 360, "left", 0, 1, 1, 0, 0)
-    end
+    setColor(255, 255, 255, self.display_text_opacity * 0.9)
+    love.graphics.printf(dsn.n_acc, self.fonts[2], self.display_global.L_topnum_x, self.display_global.L_topnum_y, 360, "left", 0, 1, 1, 0, self.fonts_h[2])
+    love.graphics.printf(dst.t_acc, self.fonts[1], self.display_global.L_toptext_x, self.display_global.L_toptext_y, 360, "left", 0, 1, 1, 0, 0)
 
     ----------------------------------------
     --- Score
