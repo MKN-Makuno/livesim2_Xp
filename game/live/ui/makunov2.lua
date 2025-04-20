@@ -119,7 +119,6 @@ local itf_conf = {
 local fonts = {
     light = "fonts/Jost-Light.ttf",
     regular = "fonts/Jost-Regular.ttf",
-    italic = "fonts/Jost-Italic.ttf",
     medium = "fonts/Jost-Medium.ttf",
 }
 
