@@ -59,6 +59,14 @@ local ColorTheme = {
 		currentColorDark = {0x1e, 0x8a, 0x96, color.hex1E8A96},
 		-- 19737d
 		currentColorDarker = {0x19, 0x73, 0x7d, color.hex19737D}
+	},
+	[8] = { -- Bluebird
+		-- ff7500
+		currentColor = {0xff, 0x75, 0x00, color.hexFF7500},
+		-- ed6d00
+		currentColorDark = {0xed, 0x6d, 0x00, color.hexED6D00},
+		-- db6500
+		currentColorDarker = {0xdb, 0x65, 0x00, color.hexDB6500}
 	}
 }
 
