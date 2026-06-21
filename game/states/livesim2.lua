@@ -730,7 +730,7 @@ function DEPLS:load(arg)
 		local num = self.persist.beatmapRandomized and arg.summary.randomStar or arg.summary.star
 		self.data.background = BackgroundLoader.load(Util.clamp(
 			(loadBackground and num > 0) and num or assert(tonumber(Setting.get("BACKGROUND_IMAGE"))),
-			1, 12
+			1, 15
 		))
 	end
 
