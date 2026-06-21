@@ -273,7 +273,7 @@ function gameSetting:load()
 	local font31, font26, font22, font16 = MainFont.get(31, 26, 22, 16)
 
 	if self.persist.background == nil then
-		self.persist.background = BackgroundLoader.load(tonumber(Setting.get("BACKGROUND_IMAGE")))
+		self.persist.background = BackgroundLoader.load(math.min(tonumber(Setting.get("BACKGROUND_IMAGE")), 15))
 	end
 
 	if self.data.shadowGradient == nil then
