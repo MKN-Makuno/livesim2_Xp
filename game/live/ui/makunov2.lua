@@ -594,10 +594,10 @@ function MakunoV2UI:setScoreRange(c, b, a, s)
             100000, 
             250000, 
             350000, 
-            735000, 
-            1180000, 
-            2400000, 
-            3535000  
+            700000, 
+            1050000, 
+            2100000, 
+            3150000  
         }
     else
         self.data_scorerank = {
@@ -605,10 +605,10 @@ function MakunoV2UI:setScoreRange(c, b, a, s)
             b, 
             a, 
             s, 
-            (s*2)+(c*1.4), 
-            (s*3)+(b*1.3), 
-            (s*6)+(a*1.2), 
-            (s*9)+(s*1.1)  
+            (s*2), 
+            (s*3), 
+            (s*6), 
+            (s*9)  
         }
     end
 end
