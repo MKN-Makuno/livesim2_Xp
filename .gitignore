@@ -2,3 +2,4 @@
 jit/
 docs/out
 build-util/__pycache__
+test

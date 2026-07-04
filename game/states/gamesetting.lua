@@ -273,7 +273,7 @@ function gameSetting:load()
 	local font31, font26, font22, font16 = MainFont.get(31, 26, 22, 16)
 
 	if self.persist.background == nil then
-		self.persist.background = BackgroundLoader.load(math.min(tonumber(Setting.get("BACKGROUND_IMAGE")), 15))
+		self.persist.background = BackgroundLoader.load(math.min(tonumber(Setting.get("BACKGROUND_IMAGE")), 16))
 	end
 
 	if self.data.shadowGradient == nil then
@@ -377,7 +377,7 @@ function gameSetting:load()
 		self.persist.bgSetting = {
 			switchSetting(frame, L"setting:background:loadCustom", "AUTO_BACKGROUND")
 				:setPosition(0, 12),
-			numberSetting(frame, L"setting:background:image", "BACKGROUND_IMAGE", {min = 1, max = 15})
+			numberSetting(frame, L"setting:background:image", "BACKGROUND_IMAGE", {min = 1, max = 16})
 				:setChangedCallback(self, startChangeBackground)
 				:setPosition(0, 64+12),
 			numberSetting(frame, L"setting:background:dim", "LIVESIM_DIM", {min = 0, max = 100})
