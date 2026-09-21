@@ -795,8 +795,16 @@ function MakunoV2UI:comboJudgement(judgement, addcombo)
         self.data_currentEXscore = self.data_currentEXscore + (1 * hold_bonus)
         self.display_judgement_text = self.display_text.judge.Great
     elseif judgement == "good" then
+
+        --[[
+        
+            who the f*** thinking breaking combo on good is a "great" idea?
+            well, sif doesn't meant to be """""rhythm game""""" so it doesn't matter...
+
+        ]]--
+
         breakcombo = true
-        self.data_currentEXscore = self.data_currentEXscore - (1 * hold_bonus)
+        self.data_currentEXscore = self.data_currentEXscore - (4 * hold_bonus)
         self.display_judgement_text = self.display_text.judge.Good
     elseif judgement == "bad" then
         breakcombo = true
@@ -804,7 +812,7 @@ function MakunoV2UI:comboJudgement(judgement, addcombo)
         self.display_judgement_text = self.display_text.judge.Bad
     elseif judgement == "miss" then
         breakcombo = true
-        self.data_currentEXscore = self.data_currentEXscore - (3 * hold_bonus)
+        self.data_currentEXscore = self.data_currentEXscore - (1 * hold_bonus)
         self.display_judgement_text = self.display_text.judge.Miss
     end
 
