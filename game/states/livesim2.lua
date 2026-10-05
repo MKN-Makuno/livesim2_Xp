@@ -175,6 +175,7 @@ local function liveClearCallback(self)
 		allowRetry = not(self.persist.arg.allowRetry),
 		allowSave = not(self.persist.directLoad),
 		autoplay = self.persist.autoplay,
+		scoreRange = self.persist.scoreRange,
 		comboRange = self.persist.comboRange,
 		background = self.data.background
 	})
@@ -314,6 +315,7 @@ function DEPLS:load(arg)
 	}
 	self.persist.accuracyData = {}
 	self.persist.comboRange = {0, 0, 0, 0}
+	self.persist.scoreRange = {0, 0, 0, 0}
 
 	-- Create new note manager
 	self.data.noteManager = note.newNoteManager({
@@ -521,7 +523,7 @@ function DEPLS:load(arg)
 		self.persist.noteInfo.totalNotes = #notes
 		self.data.liveUI:setTotalNotes(#notes)
 		self.data.noteManager:initialize()
-
+		
 		-- Set score range (c,b,a,s order)
 		log.debugf("livesim2", "calculated s score is %d", fullScore)
 		self.data.liveUI:setScoreRange(
@@ -530,6 +532,14 @@ function DEPLS:load(arg)
 			math.floor(fullScore * 633/739 + 0.5),
 			fullScore
 		)
+		
+		if not(self.persist.scoreRange) then
+			self.persist.scoreRange[1] = math.floor(fullScore * 211/739 + 0.5)
+			self.persist.scoreRange[2] = math.floor(fullScore * 528/739 + 0.5)
+			self.persist.scoreRange[3] = math.floor(fullScore * 633/739 + 0.5)
+			self.persist.scoreRange[4] = math.floor(fullScore) -- just to be sure there's no decimal
+		end
+
 		if not(self.persist.comboRange) then
 			local len = #notes
 			self.persist.comboRange[1] = math.ceil(len * 0.3)
@@ -747,6 +757,11 @@ function DEPLS:load(arg)
 			arg.summary.scoreA,
 			arg.summary.scoreS
 		)
+
+		self.persist.scoreRange[1] = arg.summary.scoreC
+		self.persist.scoreRange[2] = arg.summary.scoreB
+		self.persist.scoreRange[3] = arg.summary.scoreA
+		self.persist.scoreRange[4] = arg.summary.scoreS
 	end
 
 	-- Set combo range when available
@@ -1031,6 +1046,11 @@ function DEPLS:update(dt)
 		if self.data.coverArtDisplay.time >= 3 then
 			self.persist.coverArtDisplayDone = true
 		end
+	end
+
+	-- debug
+	if not(self.persist.render) then
+		collectgarbage()
 	end
 end
 

@@ -71,7 +71,8 @@ function resultScreen:load(arg)
 	-- * allowRetry - Allow hold to retry?
 	-- * allowSave - Allow replay savig?
 	-- * autoplay - Is result from autoplay?
-	-- * comboRange - Score and combo range
+	-- * scoreRange - Score range
+	-- * comboRange - Combo range
 	-- * background - Beatmap background
 	Glow.clear()
 
@@ -206,7 +207,7 @@ function resultScreen:start(arg)
 		arg.summary.scoreB,
 		arg.summary.scoreA,
 		arg.summary.scoreS,
-	}
+	} or arg.scoreRange
 	self.persist.comboWeight = arg.replay.perfect + arg.replay.great + arg.replay.good + arg.replay.bad + arg.replay.miss
 	self.persist.coverArt = arg.summary.coverArt and arg.summary.coverArt.image
 	if self.persist.coverArt then
@@ -231,14 +232,16 @@ function resultScreen:start(arg)
 			end
 		end
 
-		if combo >= self.persist.comboRange[4] then
-			self.persist.comboQuad = rankingQuad[4]
-		elseif combo >= self.persist.comboRange[3] then
-			self.persist.comboQuad = rankingQuad[3]
-		elseif combo >= self.persist.comboRange[2] then
-			self.persist.comboQuad = rankingQuad[2]
-		elseif combo >= self.persist.comboRange[1] then
-			self.persist.comboQuad = rankingQuad[1]
+		if self.persist.comboRange then
+			if combo >= self.persist.comboRange[4] then
+				self.persist.comboQuad = rankingQuad[4]
+			elseif combo >= self.persist.comboRange[3] then
+				self.persist.comboQuad = rankingQuad[3]
+			elseif combo >= self.persist.comboRange[2] then
+				self.persist.comboQuad = rankingQuad[2]
+			elseif combo >= self.persist.comboRange[1] then
+				self.persist.comboQuad = rankingQuad[1]
+			end
 		end
 	end
 
@@ -367,6 +370,10 @@ function resultScreen:draw()
 	love.graphics.rectangle("fill", -88, 231, 1136, 452)
 	love.graphics.setShader(Util.drawText.workaroundShader)
 	love.graphics.draw(self.persist.nameText, 214, 100)
+	love.graphics.setColor(color.black)
+	love.graphics.setLineWidth(2)
+	love.graphics.line(20, 338, 960 - 20, 338)
+	love.graphics.setColor(color.white)
 	local c = love.graphics.getCanvas()
 	love.graphics.draw(self.persist.indicatorText)
 	love.graphics.draw(self.persist.valueInfoText)
@@ -405,8 +412,8 @@ resultScreen:registerEvent("keyreleased", function(_, key)
 	end
 end)
 
-resultScreen:registerEvent("mousepressed", function(self, _, _, b, ist)
-	if ist or b <= 2 then
+resultScreen:registerEvent("mousepressed", function(self, _, _, button, istouch)
+	if istouch or button <= 2 then
 		return skipResultTween(self)
 	end
 end)
