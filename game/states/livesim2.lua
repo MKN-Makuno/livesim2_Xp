@@ -115,7 +115,7 @@ local function playTapSFXSound(tapSFX, name, nsAccumulation)
 		AudioManager.play(audio)
 		list[#list + 1] = audio
 
-		if nsAccumulation then
+		if nsAccumulation < 1 then
 			list.alreadyPlayed = true
 		end
 	end

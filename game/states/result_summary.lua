@@ -296,7 +296,7 @@ function resultScreen:start(arg)
 		self.persist.indicatorText:addf(v, 120 / fsc, "center", 274 - 60 + (i - 1) * 120, 406, 0, fsc)
 	end
 	self.persist.indicatorText:addf({color.black, "COMBO"}, 120 / fsc, "center", 274 - 60 + 5 * 120, 406, 0, fsc)
-	self.persist.indicatorText:addf({color.black, "Score"}, 240 * 32/24, "center", 480, 260, 0, 24/32, 24/32, 120 * 32/24)
+	self.persist.indicatorText:addf({color.black, "Score"}, 240 * 32/24, "center", 480, 255, 0, 24/32, 24/32, 120 * 32/24)
 end
 
 function resultScreen:update(dt)
@@ -342,7 +342,7 @@ function resultScreen:update(dt)
 			814, 360
 		)
 		-- Score
-		self.persist.valueInfoText:addf({color.black, PV(info.score, ip)}, 360, "center", 300, 296)
+		self.persist.valueInfoText:addf({color.black, PV(info.score, ip)}, 360, "center", 300, 285)
 	end
 end
 
