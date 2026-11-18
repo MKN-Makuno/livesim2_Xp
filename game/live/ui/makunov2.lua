@@ -183,11 +183,8 @@ end
 ---@param i integer (nil - 9)
 ---@return table RGB {r, g, b}
 local function retrieveColor(i)
-    if i then
-        return {itf_score.color[i][1], itf_score.color[i][2], itf_score.color[i][3]}
-    else
-        return {itf_score.color[1][1], itf_score.color[1][2], itf_score.color[1][3]}
-    end
+    if not(i) or not(type(i) == "number") then i = 1 end
+    return {itf_score.color[i][1], itf_score.color[i][2], itf_score.color[i][3]}
 end
 
 ---Retrieve position data to be use for draw
