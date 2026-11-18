@@ -75,7 +75,7 @@ local itf_conf = {
 
         0 - Display as Percentage (Start from 0%)
         1 - Display as Percentage (Start from 100%)
-        2 - Display as 1 Million Points
+        2 - Display as 1 Million Points (Start from 0)
     ]]
     dy_accdisplay = 1,
 
