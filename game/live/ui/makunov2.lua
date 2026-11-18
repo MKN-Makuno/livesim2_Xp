@@ -505,6 +505,7 @@ function MakunoV2UI:getFailAnimation()
         love.graphics.printf(spacedtext(TL.text.str), TL.text.font, TL.text.x, TL.text.y + 2, 720, "center", 0, TL.text.scale, TL.text.scale, 360, TL.text.font_h)
         setColor(255, 255, 255, TL.text.o)
         love.graphics.printf(spacedtext(TL.text.str), TL.text.font, TL.text.x, TL.text.y, 720, "center", 0, TL.text.scale, TL.text.scale, 360, TL.text.font_h)
+        love.graphics.setBlendMode("alpha", "alphamultiply")
     end
 
     TL.t:tween(200, TL.text, {
